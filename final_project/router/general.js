@@ -36,14 +36,13 @@ public_users.get("/author/:author", function (req, res) {
     const bookKeys = Object.keys(books);
   
     // filter upon author
-    const filteredBooks = bookKeys
-      .filter(
-        (key) => books[key].author.toLowerCase() === authorName.toLowerCase()
+    const chosenBooks = bookKeys
+      .filter((key) => books[key].author.toLowerCase() === authorName.toLowerCase()
       )
       .map((key) => books[key]);
   
-    if (filteredBooks.length > 0) {
-      return res.status(200).json(filteredBooks);
+    if (chosenBooks.length > 0) {
+      return res.status(200).json(chosenBooks);
     } else {
       return res.status(404).json({ message: "No books found for the author you entered" });
     }
@@ -51,8 +50,18 @@ public_users.get("/author/:author", function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+ 
+    const bookTitle = req.params.title;
+
+    const chosenTitle = bookTitle.filter((title) => books.title === bookTitle);
+    
+        if (chosenTitle.length > 0){
+          return res.status(200),json(chosenTitle)
+
+        }else{
+          return res.status(404),json({message: "There are no books with that title"})
+     }
+
 });
 
 //  Get book review
