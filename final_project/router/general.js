@@ -6,7 +6,6 @@ const public_users = express.Router();
 
 
 public_users.post("/register", (req,res) => {
-    public_users.post("/register", (req,res) => {
         const { username, password } = req.body;
         if (!username || !password) {
           return res.status(400).json({ message: "Username and password are required" });
@@ -15,7 +14,7 @@ public_users.post("/register", (req,res) => {
           return res.status(409).json({ message: "Username already exists" });
         }
         users.push({ username, password });
-        return res.status(201).json({ message: "User registered successfully" });
+        return res.status(201).json({ message: "User registered successfully. Now you can login." });
     });
     
 
@@ -54,17 +53,23 @@ public_users.get("/author/:author", function (req, res) {
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
  
-    const bookTitle = req.params.title;
+  const titleName = req.params.title;
+  const bookKeys = Object.keys(books);
 
-    const chosenTitle = bookTitle.filter((title) => books.title === bookTitle);
-    
-        if (chosenTitle.length > 0){
-          return res.status(200),json(chosenTitle)
+  // filter books based on the provided title
+  const filteredBooks = bookKeys
+    .filter((key) =>
+      books[key].title.toLowerCase().includes(titleName.toLowerCase())
+    )
+    .map((key) => books[key]);
 
-        }else{
-          return res.status(404),json({message: "There are no books with that title"})
-     }
-
+  if (filteredBooks.length > 0) {
+    return res.status(200).json(filteredBooks);
+  } else {
+    return res
+      .status(404)
+      .json({ message: "No books found with the provided title" });
+  }
 });
 
 //  Get book review
